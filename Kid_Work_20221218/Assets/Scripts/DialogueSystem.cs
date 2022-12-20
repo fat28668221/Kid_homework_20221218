@@ -14,6 +14,8 @@ namespace Justin
         private float dialogueIntervalTime = 0.1f;
         [SerializeField, Header("開頭對話")]
         private DialogueData dialogueOpening;
+        [SerializeField, Header("對話按鍵")]
+        private KeyCode dialogueKey = KeyCode.Space;
 
         private WaitForSeconds dialogueInterva => new WaitForSeconds(dialogueIntervalTime);
         private CanvasGroup groupDialogue;
@@ -36,11 +38,14 @@ namespace Justin
         } 
         #endregion
 
-        private IEnumerator FadeGroup()
+        private IEnumerator FadeGroup(bool fadeIn = true)
         {
+
+            float increase = fadeIn ? +0.1f : -0.1f;
+
             for (int i = 0; i < 10; i++)
             {
-                groupDialogue.alpha += 0.1f;
+                groupDialogue.alpha += increase;
                 yield return new WaitForSeconds(0.04f);
             }
         }
@@ -48,16 +53,32 @@ namespace Justin
         private IEnumerator TypeEffect()
         {
             textName.text = dialogueOpening.dialogueName;
-            textContent.text = "";
 
-            string dialogue = dialogueOpening.dialogueContents[0];
-            for (int i = 0; i < dialogue.Length; i++)
+            for (int j = 0; j < dialogueOpening.dialogueContents.Length; j++)
             {
-                textContent.text += dialogue[i];
-                yield return dialogueInterva;
-            }
-            goTriangle.SetActive(true);
+                textContent.text = "";
+                goTriangle.SetActive(false);
 
+
+
+                string dialogue = dialogueOpening.dialogueContents[j];
+
+                for (int i = 0; i < dialogue.Length; i++)
+                {
+                    textContent.text += dialogue[i];
+                    yield return dialogueInterva;
+                }
+                goTriangle.SetActive(true);
+
+                while (!Input.GetKeyDown(dialogueKey))
+                {
+                    yield return null;
+                }
+
+                print("<color=#993300>玩家按下按鍵!</color");
+            }
+
+            StartCoroutine(FadeGroup(false));
         }
     }
 }
