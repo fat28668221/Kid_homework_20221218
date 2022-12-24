@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba9855c8f9b6fb4c91aab1c536501a6, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  dialogueName: "\u77F3\u982D"
+  dialogueName: 
   dialogueContents:
-  - "\u901A\u5F80\u51FA\u53E3\u7684\u8DEF\u88AB\u5927\u77F3\u982D\u64CB\u4F4F\u4E86"
-  - "\u8A72\u600E\u9EBC\u8FA6..."
+  - "\u901A\u5F80\u51FA\u53E3\u7684\u8DEF\u88AB\u5DE8\u77F3\u64CB\u4F4F\u4E86"
+  - "\u807D\u8AAA\u53EA\u6709\u81F3\u5C0A\u93DF\u5B50\u624D\u6709\u8FA6\u6CD5\u79FB\u958B\u5DE8\u77F3..."

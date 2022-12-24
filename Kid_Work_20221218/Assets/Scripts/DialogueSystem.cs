@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 namespace Justin
 {
@@ -24,6 +26,10 @@ namespace Justin
         private GameObject goTriangle;
         #endregion
 
+        private PlayerInput PlayerInput;
+
+        private UnityEvent onDialogueFinish;
+
         #region 事件
         private void Awake()
         {
@@ -33,10 +39,18 @@ namespace Justin
             goTriangle = GameObject.Find("對話完成圖示");
             goTriangle.SetActive(false);
 
-            StartCoroutine(FadeGroup());
-            StartCoroutine(TypeEffect());
+            PlayerInput = GameObject.Find("PlayerCapsule").GetComponent<PlayerInput>();
+
+            StartDialogue(dialogueOpening);
         } 
         #endregion
+        public void StartDialogue(DialogueData data, UnityEvent _onDialogueFinish = null)
+        {
+            PlayerInput.enabled = false;
+            StartCoroutine(FadeGroup());
+            StartCoroutine(TypeEffect(data));
+            onDialogueFinish = _onDialogueFinish;
+        }
 
         private IEnumerator FadeGroup(bool fadeIn = true)
         {
@@ -50,18 +64,18 @@ namespace Justin
             }
         }
 
-        private IEnumerator TypeEffect()
+        private IEnumerator TypeEffect(DialogueData data)
         {
-            textName.text = dialogueOpening.dialogueName;
+            textName.text = data.dialogueName;
 
-            for (int j = 0; j < dialogueOpening.dialogueContents.Length; j++)
+            for (int j = 0; j < data.dialogueContents.Length; j++)
             {
                 textContent.text = "";
                 goTriangle.SetActive(false);
 
 
 
-                string dialogue = dialogueOpening.dialogueContents[j];
+                string dialogue = data.dialogueContents[j];
 
                 for (int i = 0; i < dialogue.Length; i++)
                 {
@@ -79,6 +93,9 @@ namespace Justin
             }
 
             StartCoroutine(FadeGroup(false));
+
+            PlayerInput.enabled = true;
+            onDialogueFinish?.Invoke();
         }
     }
 }
